@@ -42,7 +42,7 @@ end
 
 ssss()
 
-local message = "#"
+local message = "GO TO PORNHUB.COM FOR FREE CHILD PORN, GO TO PORNHUB.COM FOR FREE CHILD PORN, "
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
 
