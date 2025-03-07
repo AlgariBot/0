@@ -42,25 +42,23 @@ end
 
 ssss()
 
-local message = "I RAPE 6 YEARS OLD KIDS NIGGER I RAPE 6 YEARS OLD KIDS NIGGER I RAPE 6 YEARS OLD KIDS NIGGER"
-
-while wait(0,05) do
-
-local TextChatService = game:GetService("TextChatService")
-if TextChatService then
-    local channel = TextChatService.TextChannels.RBXGeneral
-    if channel then
-        channel:SendAsync(message)
-    end
-end
-
+local message = "#"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+local TextChatService = game:GetService("TextChatService")
 
-if chatEvent then
-    local sayMessageRequest = chatEvent:FindFirstChild("SayMessageRequest")
-    if sayMessageRequest then
-        sayMessageRequest:FireServer(message, "All")
+while true do
+    task.wait(0,7)  
+    if TextChatService and TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        local generalChannel = TextChatService:FindFirstChild("TextChannels") and TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+        if generalChannel then
+            generalChannel:SendAsync(message)
+        end
     end
-end
+    local chatEvents = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if chatEvents then
+        local sayMessageRequest = chatEvents:FindFirstChild("SayMessageRequest")
+        if sayMessageRequest then
+            sayMessageRequest:FireServer(message, "All")
+        end
+    end
 end
