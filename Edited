@@ -41,7 +41,7 @@ end
 function Functions:Search(query, paid, page, max)
     assert(query, "Query resolves to nil.")
 
-    page = page or 10
+    page = page or 1
     max = max or 10
     paid = paid or false
 
@@ -56,7 +56,7 @@ function Functions:Search(query, paid, page, max)
 end
 
 function Functions:FetchScripts(page)
-    page = page or 10
+    page = page or 1
 
     local fetched = FetchUrl(API .. "script/fetch?page" .. page)
     local result = fetched.result
@@ -73,7 +73,7 @@ function Functions:GetLatestScript(result)
         error("Result is not a valid table.")
     end
 
-    return scripts[1]
+    return scripts[10]
 end
 
 function Functions:GetScripts(result, predicate)
