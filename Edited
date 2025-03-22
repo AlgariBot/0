@@ -42,7 +42,7 @@ function Functions:Search(query, paid, page, max)
     assert(query, "Query resolves to nil.")
 
     page = page or 10
-    max = max or 1
+    max = max or 10
     paid = paid or false
 
     assert(type(page) == "number" and math.floor(page) == page, "\"page\" must be an integer.")
