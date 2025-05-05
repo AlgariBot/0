@@ -1,0 +1,336 @@
+-- vana
+
+local ud=UDim.new
+local ud2=UDim2.new
+local inst=Instance.new
+local vec2=Vector2.new
+local vec3=Vector3.new
+local col3=Color3.new
+local rgb=Color3.fromRGB
+local font="SourceSans"
+local italic="SourceSansItalic"
+local mono="RobotoMono"
+local bold = "SourceSansBold"
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local vinput = game:GetService("VirtualInputManager")
+
+local ScreenGui =  Instance.new("ScreenGui")
+ScreenGui.ScreenInsets = "None"
+ScreenGui.Name = "vagnl"
+ScreenGui.Parent = gethui and gethui() or game:GetService("CoreGui")
+
+local function cr(a,b)  
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = ud(b)
+    UICorner.Parent = a
+end  
+local function str(a,b,c)
+    local stroke = inst("UIStroke")
+    stroke.Color = c
+    stroke.Thickness = b
+    stroke.Parent = a
+end
+
+  
+local function as(a,b)  
+    local asp = inst("UIAspectRatioConstraint")  
+    asp.AspectRatio = b  
+    asp.Parent = a  
+end  
+
+local function zs(a,b)  
+    local zsd = inst("UIScale")  
+    zsd.Scale = b  
+    zsd.Parent = a  
+end  
+
+local function drag(Placeholder,speed)
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+	if not dragging then return end
+	local delta = input.Position - dragStart
+	local newPos = UDim2.new(
+		startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y
+	)
+
+	TweenService:Create(Placeholder, TweenInfo.new(speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Position = newPos
+	}):Play()
+end
+
+Placeholder.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = Placeholder.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+Placeholder.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+end
+
+
+local Placeholder = inst("Frame")
+Placeholder.Size = ud2(0.15, 0, 0.15, 0)
+Placeholder.Position = ud2(0.1, -20, 0.1, 0)
+Placeholder.BackgroundColor3 = rgb(0, 0, 0)
+Placeholder.BorderSizePixel = 0
+Placeholder.Active = true
+Placeholder.BackgroundTransparency = 0.2
+Placeholder.Parent = ScreenGui
+
+drag(Placeholder,0.1)
+zs(Placeholder,1)
+as(Placeholder,8)
+
+local O_F = inst("TextButton")
+O_F.Size = ud2(1, 0, 1, 0)
+O_F.Position = UDim2.new(0, 0, 0, 0)
+O_F.BackgroundColor3 = rgb(0, 0, 0)
+O_F.BorderSizePixel = 0
+O_F.Text = "▼"
+O_F.TextColor3 = rgb(255, 255, 255)
+O_F.BackgroundTransparency = 0.2
+O_F.Font = font
+O_F.TextSize = 18
+O_F.Style = "RobloxButton"
+O_F.Parent = Placeholder
+O_F.AnchorPoint = vec2(0,0)
+
+as(O_F,1)
+
+local KillGui = inst("TextButton")
+KillGui.Name = "KillGui"
+KillGui.Size = ud2(1, 0, 1, 0)
+KillGui.Position = ud2(0.88,0,0,0)
+KillGui.Text = "╳"
+KillGui.TextColor3 = rgb(255, 255, 255)
+KillGui.BackgroundTransparency = 1
+KillGui.Font = bold
+KillGui.TextSize = 18
+KillGui.Style = "RobloxButton"
+KillGui.Parent = Placeholder 
+as(KillGui,1)
+
+KillGui.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+local Name = inst("TextLabel")
+Name.Size = ud2(1, 0, 1, 0)
+Name.Position = ud2(0, 35, 0, 0)
+Name.TextColor3 = rgb(255, 255, 255)
+Name.BackgroundTransparency = 1
+Name.Font = font
+Name.TextSize = 20
+Name.TextXAlignment = "Left"
+Name.Parent = Placeholder
+Name.TextWrapped=true
+Name.AnchorPoint = vec2(0,0)
+
+local Background = inst("Frame")
+Background.Size = ud2(1, 0, 3, 0)
+Background.Position = ud2(0, 0, 1, 0)
+Background.BackgroundColor3 = rgb(0,0,0)
+Background.BorderSizePixel = 0
+Background.Active = false
+Background.BackgroundTransparency = 0.3
+Background.Parent = Placeholder
+
+O_F.MouseButton1Click:Connect(function()
+    Background.Visible = not Background.Visible
+    if Background.Visible then
+        O_F.Text = "▼"
+        Resize.Visible = true
+        Settings.Visible = true
+     else
+        O_F.Text = "▶"
+        Resize.Visible = false
+        Settings.Visible = false
+     end
+end)
+
+local namebox = inst("TextBox")
+namebox.Size = ud2(0.8, 0, 0.3, 0)
+namebox.Position = ud2(0.1, 0, 0.15, 0)
+namebox.BackgroundColor3 = rgb(0, 0, 0)
+namebox.BorderSizePixel = 0
+namebox.Text = ""
+namebox.TextColor3 = rgb(255, 255, 255)
+namebox.BackgroundTransparency = 0.6
+namebox.Font = font
+namebox.TextSize = 20
+namebox.Parent = Background
+namebox.TextWrapped = true
+namebox.TextXAlignment = "Left"
+namebox.ClearTextOnFocus = false
+namebox.PlaceholderText = "Target Name"
+
+cr(namebox,0.2)
+
+Name.Text = "Vagina / Anal Sex 1"
+
+local player = game.Players.LocalPlayer  
+local runService = game:GetService("RunService")  
+local vec3 = Vector3.new  
+local col3 = Color3.new  
+local inst = Instance.new  
+local mat = Enum.Material  
+local ud2 = UDim2.new  
+local rgb = Color3.fromRGB  
+local font = Enum.Font.SourceSans
+
+local function airwalk(char)  
+	local hrp = char:WaitForChild("HumanoidRootPart")  
+	local hum = char:WaitForChild("Humanoid")  
+
+	local part = inst("Part")  
+	part.Anchored = true  
+	part.Size = vec3(5, 1, 5)  
+	part.Name = "AirWalk$∆∆•"  
+	part.Color = col3(1, 1, 1)  
+	part.Material = mat.Plastic  
+	part.CanCollide = true  
+	part.Transparency = 1  
+	part.TopSurface = 0  
+	part.BottomSurface = 0  
+	part.Parent = workspace  
+
+	local conn = runService.RenderStepped:Connect(function()  
+		if hum.Health > 0 then  
+			part.Position = vec3(hrp.Position.X, hrp.Position.Y - 3.5, hrp.Position.Z)  
+		end  
+	end)  
+
+	hum.Died:Connect(function()  
+		conn:Disconnect()  
+		part:Destroy()  
+	end)  
+end  
+
+local function se(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, speed, tog, rotx, roty, rotz)  
+	local plr = game.Players.LocalPlayer  
+	local hum = plr.Character:WaitForChild("Humanoid")  
+	local target, isTp, isPlay, last = nil, false, false, tick()  
+	local off1, off2, cur = cof1, cof2, cof1  
+	local anims = {Ida, Idb, Idc, Idd, ssa, ssb}  
+	for i = 1, #anims do  
+		anims[i] = {Id = "rbxassetid://" .. anims[i], Track = nil}  
+	end  
+
+	local function getT(n)  
+		n = n:lower()  
+		for _, p in ipairs(game.Players:GetPlayers()) do  
+			local a, b = p.Name:lower(), p.DisplayName:lower()  
+			if a:sub(1, #n) == n or b:sub(1, #n) == n then  
+				return p  
+			end  
+		end  
+		return nil  
+	end  
+
+	local function tp()  
+		if target and target.Character then  
+			local t = target.Character:FindFirstChild("HumanoidRootPart")  
+			local l = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")  
+			if t and l then  
+				local loop  
+				loop = runService.Stepped:Connect(function(_, d)  
+					if isTp then  
+						local rot = CFrame.Angles(math.rad(rotx), math.rad(roty), math.rad(rotz))  
+						l.CFrame = l.CFrame:Lerp(t.CFrame * cur * rot, d * speed)  
+						if tick() - last >= tog then  
+							cur = (cur == off1 and off2 or off1)  
+							last = tick()  
+						end  
+					else  
+						loop:Disconnect()  
+					end  
+				end)  
+			end  
+		end  
+	end  
+
+	local btn = inst("TextButton")  
+	btn.Size = ud2(0.8, 0, 0.35, 0)  
+	btn.Position = ud2(0.1, 0, 0.45, 0)  
+	btn.BackgroundColor3 = rgb(0, 0, 0)  
+	btn.BorderSizePixel = 0  
+	btn.Text = nam  
+	btn.TextColor3 = rgb(255,255,255)  
+	btn.Font = font  
+	btn.TextSize = 20  
+	btn.Style = "RobloxButton"  
+	btn.Parent = Background  
+
+	btn.MouseButton1Click:Connect(function()  
+		target = getT(namebox.Text)  
+		if namebox.Text == "" then  
+			target = getT("020922929339")  
+		end  
+		isTp = not isTp  
+		if isTp then tp() end  
+
+		if isPlay then  
+			for _, a in ipairs(anims) do  
+				if a.Track then a.Track:Stop() end  
+			end  
+			btn.Text = nam  
+			isPlay = false  
+			workspace["AirWalk$∆∆•"]:Destroy()  
+		else  
+			for _, a in ipairs(anims) do  
+				local x = Instance.new("Animation")  
+				x.AnimationId = a.Id  
+				a.Track = hum:LoadAnimation(x)  
+				a.Track.Looped = true  
+				a.Track:Play()  
+			end  
+			isPlay = true  
+			btn.Text = "Disable"  
+			airwalk(player.Character)  
+			player.Character.Humanoid.Jump = true  
+
+			task.delay(duration, function()  
+				if isPlay then  
+					for _, a in ipairs(anims) do  
+						if a.Track then a.Track:AdjustSpeed(sp) end  
+					end  
+				end  
+			end)  
+		end  
+	end)  
+
+	plr.CharacterAdded:Connect(function()  
+		hum = plr.Character:WaitForChild("Humanoid")  
+		for _, a in ipairs(anims) do  
+			if a.Track then a.Track:Stop() end  
+		end  
+		isPlay = false  
+		isTp = false  
+		btn.Text = nam  
+	end)  
+end 
+
+se("Enable", "56153856", "282574440", "106772613", "0", "0", "0", 1, 0, CFrame.new(0,1.3,-1.5), CFrame.new(0,1.3,-2.5), 10, 0.3, 0, 0, 0)
