@@ -333,4 +333,4 @@ end
 
 -- Name, id, id, id, id, id, id, pause after s, animspeed, pos1,pos2, tween speed (max 20),speed
 
-se("Enable","56153856", "214738896", "0", "0","0","0",0, 2, CFrame.new(0, 0, 1), CFrame.new(0, 0, 1), 20, 0.3)
+se("Enable","56153856", "214738896", "0", "0","0","0",0, 2, CFrame.new(0, 0, 1), CFrame.new(0, 0, 2), 10, 0.3)
