@@ -1,0 +1,246 @@
+-- Main script
+
+local ud=UDim.new
+local ud2=UDim2.new
+local inst=Instance.new
+local vec2=Vector2.new
+local vec3=Vector3.new
+local col3=Color3.new
+local rgb=Color3.fromRGB
+local font="SourceSans"
+local italic="SourceSansItalic"
+local mono="RobotoMono"
+local bold = "SourceSansBold"
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local vinput = game:GetService("VirtualInputManager")
+local function hget(a)
+    loadstring(game:HttpGet(a))()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.ScreenInsets = "None"
+ScreenGui.Name = "SM2"
+ScreenGui.Parent = gethui and gethui() or game:GetService("CoreGui")
+
+local function cr(a,b)  
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = ud(b)
+    UICorner.Parent = a
+end  
+local function str(a,b,c)
+    local stroke = inst("UIStroke")
+    stroke.Color = c
+    stroke.Thickness = b
+    stroke.Parent = a
+end
+
+  
+local function as(a,b)  
+    local asp = inst("UIAspectRatioConstraint")  
+    asp.AspectRatio = b  
+    asp.Parent = a  
+end  
+
+local function zs(a,b)  
+    local zsd = inst("UIScale")  
+    zsd.Scale = b  
+    zsd.Parent = a  
+end  
+
+local function drag(Placeholder,speed)
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+	if not dragging then return end
+	local delta = input.Position - dragStart
+	local newPos = UDim2.new(
+		startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y
+	)
+
+	TweenService:Create(Placeholder, TweenInfo.new(speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Position = newPos
+	}):Play()
+end
+
+Placeholder.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = Placeholder.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+Placeholder.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+end
+
+
+local Placeholder = inst("Frame")
+Placeholder.Size = ud2(0.2, 0, 0.2, 0)
+Placeholder.Position = ud2(0.1, -20, 0.1, 0)
+Placeholder.BackgroundColor3 = rgb(0, 0, 0)
+Placeholder.BorderSizePixel = 0
+Placeholder.Active = true
+Placeholder.BackgroundTransparency = 0.15
+Placeholder.Parent = ScreenGui
+
+drag(Placeholder,0.1)
+zs(Placeholder,1)
+as(Placeholder,13)
+
+local O_F = inst("TextButton")
+O_F.Size = ud2(1, 0, 1, 0)
+O_F.Position = UDim2.new(0, 0, 0, 0)
+O_F.BackgroundColor3 = rgb(0, 0, 0)
+O_F.BorderSizePixel = 0
+O_F.Text = "▼"
+O_F.TextColor3 = rgb(255, 255, 255)
+O_F.BackgroundTransparency = 0.2
+O_F.Font = font
+O_F.TextSize = 18
+O_F.Style = "RobloxButton"
+O_F.Parent = Placeholder
+O_F.AnchorPoint = vec2(0,0)
+
+as(O_F,1)
+
+local KillGui = inst("TextButton")
+KillGui.Name = "KillGui"
+KillGui.Size = ud2(1, 0, 1, 0)
+KillGui.Position = ud2(0.9,0,0,0)
+KillGui.Text = "╳"
+KillGui.TextColor3 = rgb(255, 255, 255)
+KillGui.BackgroundTransparency = 1
+KillGui.Font = bold
+KillGui.TextSize = 18
+KillGui.Style = "RobloxButton"
+KillGui.Parent = Placeholder 
+as(KillGui,1)
+
+KillGui.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+local Name = inst("TextLabel")
+Name.Size = ud2(1, 0, 1, 0)
+Name.Position = ud2(0, 35, 0, 0)
+Name.Text = "SM Skibidi [2 Test]"
+Name.TextColor3 = rgb(255, 255, 255)
+Name.BackgroundTransparency = 1
+Name.Font = mono
+Name.TextSize = 17
+Name.TextXAlignment = "Left"
+Name.Parent = Placeholder
+Name.TextWrapped=true
+Name.AnchorPoint = vec2(0,0)
+
+local Background = inst("Frame")
+Background.Size = ud2(1, 0, 15, 0)
+Background.Position = ud2(0, 0, 1, 0)
+Background.BackgroundColor3 = rgb(0,0,0)
+Background.BorderSizePixel = 0
+Background.Active = false
+Background.BackgroundTransparency = 0.2
+Background.Parent = Placeholder
+
+O_F.MouseButton1Click:Connect(function()
+    Background.Visible = not Background.Visible
+    if Background.Visible then
+        O_F.Text = "▼"
+        Resize.Visible = true
+        Settings.Visible = true
+     else
+        O_F.Text = "▶"
+        Resize.Visible = false
+        Settings.Visible = false
+     end
+end)
+
+local NS1 = inst("TextButton")
+NS1.Name = "NS1"
+NS1.Size = ud2(1, 0, 1, 0)
+NS1.Position = ud2(0,0,0,0)
+NS1.Text = "Rape Player"
+NS1.TextColor3 = rgb(255, 255, 255)
+NS1.BackgroundTransparency = 1
+NS1.Font = mono
+NS1.TextSize = 18
+NS1.Style = "RobloxButton"
+NS1.TextXAlignment = "Left"
+NS1.Parent = Background
+as(NS1,10)
+NS1.MouseButton1Click:Connect(function()
+    hget("https://raw.githubusercontent.com/AlgariBot/0/refs/heads/main/BangPlayer")
+end)
+
+local NS2 = inst("TextButton")
+NS2.Name = "NS2"
+NS2.Size = ud2(1, 0, 1, 0)
+NS2.Position = ud2(0,0,0.09,0)
+NS2.Text = "Head Bang"
+NS2.TextColor3 = rgb(255, 255, 255)
+NS2.BackgroundTransparency = 1
+NS2.Font = mono
+NS2.TextSize = 18
+NS2.Style = "RobloxButton"
+NS2.TextXAlignment = "Left"
+NS2.Parent = Background
+as(NS2,10)
+NS2.MouseButton1Click:Connect(function()
+    hget("https://raw.githubusercontent.com/AlgariBot/0/refs/heads/main/HeadBangPlayer")
+end)
+
+local NS3 = inst("TextButton")
+NS3.Name = "NS3"
+NS3.Size = ud2(1, 0, 1, 0)
+NS3.Position = ud2(0,0,0.18,0)
+NS3.Text = "Oral Sex"
+NS3.TextColor3 = rgb(255, 255, 255)
+NS3.BackgroundTransparency = 1
+NS3.Font = mono
+NS3.TextSize = 18
+NS3.Style = "RobloxButton"
+NS3.TextXAlignment = "Left"
+NS3.Parent = Background
+as(NS3,10)
+NS3.MouseButton1Click:Connect(function()
+    hget("https://raw.githubusercontent.com/AlgariBot/0/refs/heads/main/OralSxPlayer")
+end)
+
+
+
+local NS4 = inst("TextButton")
+NS4.Name = "NS4"
+NS4.Size = ud2(1, 0, 1, 0)
+NS4.Position = ud2(0,0,0.27,0)
+NS4.Text = "Vagina/ Anal Sex 1"
+NS4.TextColor3 = rgb(255, 255, 255)
+NS4.BackgroundTransparency = 1
+NS4.Font = mono
+NS4.TextSize = 18
+NS4.Style = "RobloxButton"
+NS4.TextXAlignment = "Left"
+NS4.Parent = Background
+as(NS4,10)
+NS4.MouseButton1Click:Connect(function()
+    hget("https://raw.githubusercontent.com/AlgariBot/0/refs/heads/main/VagnlPlayer1")
+end)
